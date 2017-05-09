@@ -11,8 +11,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
-    public void bestMethodEver()
+    public void worstMethodEver()
     {
-        System.out.print("best. method. ever.");
+        System.out.print("worst. method. ever.");
     }
 }
