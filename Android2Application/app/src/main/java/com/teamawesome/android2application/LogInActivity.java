@@ -13,7 +13,7 @@ public class LogInActivity extends AppCompatActivity {
         setContentView(R.layout.activity_log_in);
     }
 
-    public void logIn(View v){
+    public void logIn(View v) {
         Intent intent = new Intent(LogInActivity.this, MainActivity.class);
         startActivity(intent);
     }
