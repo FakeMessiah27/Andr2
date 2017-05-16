@@ -4,16 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.teamawesome.android2application.ProfileActivity"
-    android:background="@mipmap/bg_log_in">
+    android:background="@mipmap/bg_log_in"
+    tools:context="com.teamawesome.android2application.ProfileActivity">
 
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="166dp"
         android:layout_height="130dp"
-        app:srcCompat="@mipmap/ic_launcher"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="8dp"
         android:layout_marginLeft="8dp"
-        app:layout_constraintLeft_toLeftOf="parent" />
+        android:layout_marginTop="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@mipmap/ic_launcher" />
 </android.support.constraint.ConstraintLayout>
