@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "390858736707",
+    "firebase_url": "https://android2-team-awesome-app.firebaseio.com",
+    "project_id": "android2-team-awesome-app",
+    "storage_bucket": "android2-team-awesome-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:390858736707:android:6f1ec57172629d4b",
+        "android_client_info": {
+          "package_name": "com.teamawesome.android2application"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "390858736707-e3u94qeqp04m4k0p0odpvu86esvrauil.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAh-xqFrORAvaOpWoRXfZ34JKwPT4k0JWA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
