@@ -11,10 +11,19 @@ public class LogInActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
+
+
+
+
     }
 
     public void logIn(View v) {
         Intent intent = new Intent(LogInActivity.this, MainActivity.class);
+        startActivity(intent);
+    }
+
+    public void register(View v){
+        Intent intent = new Intent(LogInActivity.this, RegisterActivity.class);
         startActivity(intent);
     }
 }

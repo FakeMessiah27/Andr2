@@ -156,8 +156,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         else {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, MAP_PERMISSION);
         }
-
-
     }
 
     @Override
