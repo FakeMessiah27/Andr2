@@ -30,6 +30,11 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
@@ -41,6 +46,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Marker marker;
     private FusedLocationProviderApi fusedLocationProviderApi;
     private LocationRequest locationRequest;
+
+
+    //reference to the root of the database
+    DatabaseReference RootRef = FirebaseDatabase.getInstance().getReference();
+
+    DatabaseReference latitudeRef = RootRef.child("location").child("latitude");
+    DatabaseReference longitudeRef = RootRef.child("location").child("longitude");
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +82,30 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     protected void onStart() {
         googleApiClient.connect();
+        latitudeRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Double Text = dataSnapshot.getValue(Double.class);
+                System.out.println(Text);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        longitudeRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Double Text = dataSnapshot.getValue(Double.class);
+                System.out.println(Text);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
         super.onStart();
     }
 
@@ -113,10 +150,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             else {
                 marker.setPosition(new LatLng(location.getLatitude(), location.getLongitude()));
             }
+            latitudeRef.setValue(location.getLatitude());
+            longitudeRef.setValue(location.getLongitude());
         }
         else {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, MAP_PERMISSION);
         }
+
+
     }
 
     @Override
