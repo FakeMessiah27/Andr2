@@ -10,6 +10,7 @@
     <EditText
         android:id="@+id/tbRegisterEmail"
         android:layout_width="wrap_content"
+        android:textColor="@color/colorAccent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPersonName"
@@ -28,6 +29,7 @@
     <EditText
         android:id="@+id/tbRegisterPassword"
         android:layout_width="wrap_content"
+        android:textColor="@color/colorAccent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPassword"
@@ -51,14 +53,14 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="14dp"
-        android:onClick="createAccount"
+        android:onClick="registerButtonClicked"
         android:text="Register"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.728"
+        app:layout_constraintHorizontal_bias="0.507"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tbRegisterPassword"
-        app:layout_constraintVertical_bias="0.064" />
+        app:layout_constraintVertical_bias="0.538" />
 
     <TextView
         android:id="@+id/tvStatus"

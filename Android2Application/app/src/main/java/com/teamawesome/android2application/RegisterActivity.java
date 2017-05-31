@@ -1,8 +1,10 @@
 package com.teamawesome.android2application;
 
+import android.nfc.Tag;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,6 +19,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class RegisterActivity extends AppCompatActivity {
 
     private FirebaseAuth auth;
+    private FirebaseAuth.AuthStateListener authListener;
 
     TextView tvStatus;
     TextView tvDetails;
@@ -28,6 +31,16 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         auth = FirebaseAuth.getInstance();
+        authListener = new FirebaseAuth.AuthStateListener(){
+          @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth){
+//              if(currentUser!=null){
+//
+//              } else {
+//
+//              }
+          }
+        };
 
         tvStatus = (TextView)findViewById(R.id.tvStatus);
         tvDetails = (TextView)findViewById(R.id.tvDetails);
@@ -43,12 +56,28 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
+    public void registerButtonClicked(){
+        String email = etEmail.getText().toString();
+        String password = etPassword.getText().toString();
+        createAccount(email, password);
+        Log.d("AccountCreation","Button Clicked");
+    }
+
+
     @Override
     public void onStart(){
         super.onStart();
-
+        auth.addAuthStateListener(authListener);
         FirebaseUser currentUser = auth.getCurrentUser();
         updateUI(currentUser);
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        if(auth != null){
+            auth.removeAuthStateListener(authListener);
+        }
     }
 
 
@@ -69,9 +98,11 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void createAccount(String email, String password)
     {
+        Log.d("AccountCreation", "MethodFired");
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
+                    Log.d("AccountCreation", "createUserWithEmail:onComplete " + task.isSuccessful());
                 if(task.isSuccessful())
                 {
                     FirebaseUser user = auth.getCurrentUser();
@@ -85,31 +116,7 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    private void signIn(String email, String password)
-    {
-        auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful())
-                {
-                    FirebaseUser user = auth.getCurrentUser();
-                    updateUI(user);
-                }
-                else
-                {
-                    updateUI(null);
-                    tvStatus.setText("user no bueno");
-                }
 
-            }
-        });
-    }
-
-    private void signOut()
-    {
-        auth.signOut();
-        updateUI(null);
-    }
 }
 
 
