@@ -15,14 +15,6 @@
       },
       "oauth_client": [
         {
-          "client_id": "390858736707-9n2ae01tk81cj59cfbne34onn5ha9oh9.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.teamawesome.android2application",
-            "certificate_hash": "218fe59e07a5f5f898081296892ee03e74c8728a"
-          }
-        },
-        {
           "client_id": "390858736707-25dh980v9t44pehu5kaf0t52j410amm5.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
