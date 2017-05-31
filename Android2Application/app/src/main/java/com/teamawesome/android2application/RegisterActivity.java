@@ -1,5 +1,6 @@
 package com.teamawesome.android2application;
 
+import android.content.Intent;
 import android.nfc.Tag;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +22,8 @@ public class RegisterActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     private FirebaseAuth.AuthStateListener authListener;
 
+    private boolean logInSuccesfull;
+
     TextView tvStatus;
     TextView tvDetails;
     EditText etEmail;
@@ -29,6 +32,7 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        logInSuccesfull = false;
         setContentView(R.layout.activity_register);
         auth = FirebaseAuth.getInstance();
         authListener = new FirebaseAuth.AuthStateListener(){
@@ -56,12 +60,7 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    public void registerButtonClicked(){
-        String email = etEmail.getText().toString();
-        String password = etPassword.getText().toString();
-        createAccount(email, password);
-        Log.d("AccountCreation","Button Clicked");
-    }
+
 
 
     @Override
@@ -107,6 +106,8 @@ public class RegisterActivity extends AppCompatActivity {
                 {
                     FirebaseUser user = auth.getCurrentUser();
                     updateUI(user);
+                    logInSuccesfull = true;
+                    startMain();
                 }
                 else
                 {
@@ -114,6 +115,30 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void startMain(){
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
+    public void registerButtonClicked(){
+        String email = etEmail.getText().toString();
+        String password = etPassword.getText().toString();
+        if (!email.contains("@")){
+            tvStatus.setText("Email address not valid!");
+        } else{
+            tvStatus.setText("Something went wrong, please try again");
+        }
+
+
+        createAccount(email, password);
+        if (!logInSuccesfull){
+
+        } else{
+            Log.d("Account", "start activity ");
+
+        }
     }
 
 
