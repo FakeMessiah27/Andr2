@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "390858736707-25dh980v9t44pehu5kaf0t52j410amm5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.teamawesome.android2application",
+            "certificate_hash": "c46d27e6b2fb758d1c11d7b30b5fb67dbbaee648"
+          }
+        },
+        {
           "client_id": "390858736707-e3u94qeqp04m4k0p0odpvu86esvrauil.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "390858736707-e3u94qeqp04m4k0p0odpvu86esvrauil.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2
