@@ -30,6 +30,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -39,26 +41,36 @@ import com.google.firebase.database.ValueEventListener;
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
+    // Google maps variables
     private static final int MAP_PERMISSION = 001;
-
     private GoogleMap map;
     private GoogleApiClient googleApiClient;
     private Marker marker;
     private FusedLocationProviderApi fusedLocationProviderApi;
     private LocationRequest locationRequest;
 
-
+    // Firebase variables
     //reference to the root of the database
-    DatabaseReference RootRef = FirebaseDatabase.getInstance().getReference();
+    DatabaseReference RootRef;
 
-    DatabaseReference latitudeRef = RootRef.child("location").child("latitude");
-    DatabaseReference longitudeRef = RootRef.child("location").child("longitude");
+    DatabaseReference latitudeRef;
+    DatabaseReference longitudeRef;
 
+    // Authentication variables
+    private FirebaseAuth auth;
+    private FirebaseUser currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        auth = FirebaseAuth.getInstance();
+        currentUser = auth.getCurrentUser();
+
+        RootRef = FirebaseDatabase.getInstance().getReference();
+        latitudeRef = RootRef.child("location" + currentUser.getUid()).child("latitude");
+        longitudeRef = RootRef.child("location" + currentUser.getUid()).child("longitude");
 
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -149,6 +161,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
             else {
                 marker.setPosition(new LatLng(location.getLatitude(), location.getLongitude()));
+                map.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 18));
             }
             latitudeRef.setValue(location.getLatitude());
             longitudeRef.setValue(location.getLongitude());
@@ -174,6 +187,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 startActivity(intent);
                 return true;
             case R.id.MenuLogOut:
+                auth.signOut();
                 intent = new Intent(this, LogInActivity.class);
                 startActivity(intent);
                 return true;
@@ -181,5 +195,4 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 return super.onOptionsItemSelected(item);
         }
     }
-
 }
