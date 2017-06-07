@@ -2,9 +2,7 @@ package com.teamawesome.android2application;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -14,8 +12,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -23,13 +19,11 @@ import com.google.android.gms.location.FusedLocationProviderApi;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -37,6 +31,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
@@ -50,27 +47,34 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private LocationRequest locationRequest;
 
     // Firebase variables
-    //reference to the root of the database
+
+    // Reference to the root of the database
     DatabaseReference RootRef;
 
     DatabaseReference latitudeRef;
     DatabaseReference longitudeRef;
+    DatabaseReference locationsRef;
 
     // Authentication variables
     private FirebaseAuth auth;
     private FirebaseUser currentUser;
+
+    private UpdateFirebaseTask updateTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        updateTask = new UpdateFirebaseTask();
+
         auth = FirebaseAuth.getInstance();
         currentUser = auth.getCurrentUser();
 
         RootRef = FirebaseDatabase.getInstance().getReference();
-        latitudeRef = RootRef.child("location" + currentUser.getUid()).child("latitude");
-        longitudeRef = RootRef.child("location" + currentUser.getUid()).child("longitude");
+        latitudeRef = RootRef.child("locations").child(currentUser.getUid()).child("latitude");
+        longitudeRef = RootRef.child("locations").child(currentUser.getUid()).child("longitude");
+        locationsRef = RootRef.child("locations");
 
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -80,7 +84,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         locationRequest.setInterval(10000);
         locationRequest.setFastestInterval(5000);
-
 
         if (googleApiClient == null) {
             googleApiClient = new GoogleApiClient.Builder(this)
@@ -94,11 +97,49 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     protected void onStart() {
         googleApiClient.connect();
-        latitudeRef.addValueEventListener(new ValueEventListener() {
+
+//        latitudeRef.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                Double Text = dataSnapshot.getValue(Double.class);
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
+//
+//        longitudeRef.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                Double Text = dataSnapshot.getValue(Double.class);
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
+
+        locationsRef.addValueEventListener(new ValueEventListener() {
+
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Double Text = dataSnapshot.getValue(Double.class);
-                System.out.println(Text);
+            public void onDataChange(final DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    if (dataSnapshot.hasChildren()) {
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                for (DataSnapshot user : dataSnapshot.getChildren()) {
+                                    
+                                }
+                            }
+                        }).start();
+                    }
+                }
             }
 
             @Override
@@ -106,18 +147,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             }
         });
-        longitudeRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Double Text = dataSnapshot.getValue(Double.class);
-                System.out.println(Text);
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
         super.onStart();
     }
 
@@ -153,18 +183,25 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     @Override
-    public void onLocationChanged(Location location) {
+    public void onLocationChanged(final Location location) {
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            if (marker == null) {
-                marker = map.addMarker(new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude())).title("Current location"));
-                map.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 18));
-            }
-            else {
-                marker.setPosition(new LatLng(location.getLatitude(), location.getLongitude()));
-                map.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 18));
-            }
-            latitudeRef.setValue(location.getLatitude());
-            longitudeRef.setValue(location.getLongitude());
+//            if (marker == null) {
+//                marker = map.addMarker(new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude())).title("Current location"));
+//                map.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 18));
+//            }
+//            else {
+//                marker.setPosition(new LatLng(location.getLatitude(), location.getLongitude()));
+//                map.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 18));
+//            }
+//            latitudeRef.setValue(location.getLatitude());
+//            longitudeRef.setValue(location.getLongitude());
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    latitudeRef.setValue(location.getLatitude());
+                    longitudeRef.setValue(location.getLongitude());
+                }
+            }).start();
         }
         else {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, MAP_PERMISSION);
