@@ -196,6 +196,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         switch (item.getItemId()) {
             case R.id.MenuProfile:
                 intent = new Intent(this, ProfileActivity.class);
+                intent.putExtra("uid", currentUser.getUid());
                 startActivity(intent);
                 return true;
             case R.id.MenuLogOut:
