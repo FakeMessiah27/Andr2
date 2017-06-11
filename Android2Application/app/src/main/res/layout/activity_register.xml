@@ -11,6 +11,8 @@
         android:id="@+id/tbRegisterEmail"
         android:layout_width="wrap_content"
         android:textColor="@color/colorAccent"
+        android:shadowColor="@color/colorAccent"
+        android:textColorHint="@color/colorAccent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textEmailAddress"
@@ -24,12 +26,14 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="8dp"
         app:layout_constraintHorizontal_bias="0.503"
-        app:layout_constraintVertical_bias="0.307" />
+        app:layout_constraintVertical_bias="0.19" />
 
     <EditText
         android:id="@+id/tbRegisterPassword"
         android:layout_width="wrap_content"
         android:textColor="@color/colorAccent"
+        android:shadowColor="@color/colorAccent"
+        android:textColorHint="@color/colorAccent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPassword"
@@ -56,26 +60,26 @@
         android:onClick="registerButtonClicked"
         android:text="Register"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.507"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tbRegisterPassword"
-        app:layout_constraintVertical_bias="0.538" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/tvStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
-        app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:text=" "
+        android:textColor="@color/colorAccent"
+        app:layout_constraintBottom_toTopOf="@+id/tbRegisterEmail"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:textColor="@color/colorAccent"
-        app:layout_constraintBottom_toTopOf="@+id/tbRegisterEmail" />
+        app:layout_constraintVertical_bias="0.07" />
 
     <TextView
         android:id="@+id/tvDetails"
@@ -85,12 +89,13 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
-        android:text="TextView"
+        android:text=" "
         android:textColor="@color/colorAccent"
         app:layout_constraintBottom_toTopOf="@+id/tbRegisterEmail"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvStatus" />
+        app:layout_constraintTop_toBottomOf="@+id/tvStatus"
+        app:layout_constraintVertical_bias="0.012" />
 
 
 </android.support.constraint.ConstraintLayout>
