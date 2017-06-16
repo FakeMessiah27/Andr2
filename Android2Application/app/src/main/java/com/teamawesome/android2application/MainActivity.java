@@ -110,21 +110,34 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         @Override
                         public void run() {
                             map.clear();
+                            List<LatLng> allOtherLocations = new ArrayList<LatLng>();
+                            LatLng currentPosition = null;
 
                             for (DataSnapshot user : dataSnapshot.getChildren()) {
-                                Log.d("testing... : ", "Current user Uid: " + currentUser.getUid());
-                                Log.d("testing... : ", "Datasnapshot user key: " + user.getKey());
                                 if (user.getKey().toString().equals(currentUser.getUid().toString())) {
                                     Marker ownPosition = map.addMarker(new MarkerOptions()
                                             .position(new LatLng(user.child("latitude").getValue(Double.class),
                                                     user.child("longitude").getValue(Double.class))).title("Your location"));
                                     map.animateCamera(CameraUpdateFactory.newLatLngZoom(ownPosition.getPosition(), 15));
+
+                                    currentPosition = new LatLng(user.child("latitude").getValue(Double.class), user.child("longitude").getValue(Double.class));
                                 }
                                 else {
                                     map.addMarker(new MarkerOptions().position(new LatLng(user.child("latitude")
                                             .getValue(Double.class), user.child("longitude").getValue(Double.class))));
+
+                                    allOtherLocations.add(new LatLng(user.child("latitude").getValue(Double.class), user.child("longitude").getValue(Double.class)));
+                                }
+
+                                for (LatLng otherLocation : allOtherLocations)
+                                {
+                                    // Calculate distance and stuff
+
+                                    // If distance closer or something, do stuff, play sound, whatever.
                                 }
                             }
+
+                            // Do stuff with locations.
                         }
                     }).run();
                 }
