@@ -9,6 +9,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -111,11 +112,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             map.clear();
 
                             for (DataSnapshot user : dataSnapshot.getChildren()) {
-                                if (user.getValue() == currentUser.getUid()) {
+                                Log.d("testing... : ", "Current user Uid: " + currentUser.getUid());
+                                Log.d("testing... : ", "Datasnapshot user key: " + user.getKey());
+                                if (user.getKey().toString().equals(currentUser.getUid().toString())) {
                                     Marker ownPosition = map.addMarker(new MarkerOptions()
                                             .position(new LatLng(user.child("latitude").getValue(Double.class),
                                                     user.child("longitude").getValue(Double.class))).title("Your location"));
-                                    map.animateCamera(CameraUpdateFactory.newLatLngZoom(ownPosition.getPosition(), 18));
+                                    map.animateCamera(CameraUpdateFactory.newLatLngZoom(ownPosition.getPosition(), 15));
                                 }
                                 else {
                                     map.addMarker(new MarkerOptions().position(new LatLng(user.child("latitude")
