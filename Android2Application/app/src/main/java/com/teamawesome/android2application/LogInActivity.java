@@ -38,14 +38,15 @@ public class LogInActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN=1;
     private GoogleApiClient mGoogleApiClient;
     private static final String TAG = "LOG_IN_ACTIVITY";
-    private FirebaseAuth.AuthStateListener mAuthListenner;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
         auth = FirebaseAuth.getInstance();
-        mAuthListenner = new FirebaseAuth.AuthStateListener(){
+        mGoogleBtn=(SignInButton) findViewById(R.id.googleBtn);
+        authListener = new FirebaseAuth.AuthStateListener(){
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth){
                 if (firebaseAuth.getCurrentUser() !=null){
@@ -53,7 +54,6 @@ public class LogInActivity extends AppCompatActivity {
                 }
             }
         };
-        mGoogleBtn=(SignInButton) findViewById(R.id.googleBtn);
         authListener = new FirebaseAuth.AuthStateListener(){
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth){
@@ -64,7 +64,6 @@ public class LogInActivity extends AppCompatActivity {
 //                }
             }
         };
-
         etEmail = (EditText) findViewById(R.id.etLoginEmail);
         etPassword = (EditText) findViewById(R.id.etLoginPassword);
         tvStatus = (TextView) findViewById(R.id.tvStatus);
@@ -118,6 +117,7 @@ public class LogInActivity extends AppCompatActivity {
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
+        Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
         auth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -144,6 +144,7 @@ public class LogInActivity extends AppCompatActivity {
     @Override
     public void onStart(){
         super.onStart();
+        FirebaseUser currentUser= auth.getCurrentUser();
         auth.addAuthStateListener(authListener);
     }
 
