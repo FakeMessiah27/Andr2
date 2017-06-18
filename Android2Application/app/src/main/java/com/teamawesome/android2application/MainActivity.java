@@ -115,6 +115,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             map.clear();
                             List<LatLng> allOtherLocations = new ArrayList<LatLng>();
                             LatLng currentPosition = null;
+                            String userEmail;
 
                             for (DataSnapshot user : dataSnapshot.getChildren()) {
                                 if (user.getKey().toString().equals(currentUser.getUid().toString())) {
@@ -132,26 +133,25 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 else {
                                     map.addMarker(new MarkerOptions().position(new LatLng(user.child("latitude")
                                             .getValue(Double.class), user.child("longitude").getValue(Double.class))));
-
                                     allOtherLocations.add(new LatLng(user.child("latitude").getValue(Double.class), user.child("longitude").getValue(Double.class)));
                                 }
 
                                 for (LatLng otherLocation : allOtherLocations)
                                 {
+
                                     if (user.child("latitude").getValue(Double.class) == null || currentPosition == null) {
                                         break;
                                     }
-
+                                    userEmail = user.getKey();
                                     // Calculate distance and stuff
                                     double distance = getDistanceBetweenTwoPoints(currentPosition.latitude, currentPosition.longitude, otherLocation.latitude, otherLocation.longitude);
                                     allOtherLocations.remove(otherLocation);
-                                    System.out.println("distance between" + currentUser.getUid() + " and something is " + distance);
-
+                                    System.out.println("Distance between " + currentUser.getEmail() + " and " + userEmail + " is " + distance);
                                     // If distance closer or something, do stuff, play sound, whatever.
                                     if (distance < 100){
-                                        Toast.makeText(getApplicationContext(), "Username is close", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(getApplicationContext(), userEmail + " is close", Toast.LENGTH_LONG).show();
                                         Vibrator vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                                        vibe.vibrate(100);
+                                        vibe.vibrate(300);
                                         
                                     }
                                 }
