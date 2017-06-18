@@ -27,6 +27,7 @@ public class RegisterActivity extends AppCompatActivity {
     TextView tvDetails;
     EditText etEmail;
     EditText etPassword;
+    EditText etUsername;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +49,7 @@ public class RegisterActivity extends AppCompatActivity {
         tvDetails = (TextView)findViewById(R.id.tvDetails);
         etEmail = (EditText) findViewById(R.id.tbRegisterEmail);
         etPassword = (EditText) findViewById(R.id.tbRegisterPassword);
+        etUsername = (EditText) findViewById(R.id.tbUsername);
 
 //        Button btnRegister = (Button)findViewById(R.id.btnRegister);
 //        btnRegister.setOnClickListener(new View.OnClickListener() {
@@ -114,6 +116,7 @@ public class RegisterActivity extends AppCompatActivity {
     public void registerButtonClicked(View v) {
         String email = etEmail.getText().toString();
         String password = etPassword.getText().toString();
+        String username = etUsername.getText().toString();
 
         if (!email.contains("@")){
             tvStatus.setText("Email address not valid!");
@@ -122,6 +125,9 @@ public class RegisterActivity extends AppCompatActivity {
             tvStatus.setText("Password field cannot be empty!");
         }
         else if (TextUtils.isEmpty(email)) {
+            tvStatus.setText("Email field cannot be empty!");
+        }
+        else if (TextUtils.isEmpty(username)) {
             tvStatus.setText("Email field cannot be empty!");
         }
         else {
