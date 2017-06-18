@@ -24,14 +24,11 @@ public class RegisterActivity extends AppCompatActivity {
 
     private FirebaseAuth auth;
     private FirebaseAuth.AuthStateListener authListener;
-    DatabaseReference RootRef;
-    DatabaseReference usernameRef;
 
     TextView tvStatus;
     TextView tvDetails;
     EditText etEmail;
     EditText etPassword;
-    EditText etUsername;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,21 +46,10 @@ public class RegisterActivity extends AppCompatActivity {
           }
         };
 
-        RootRef = FirebaseDatabase.getInstance().getReference();
-
         tvStatus = (TextView)findViewById(R.id.tvStatus);
         tvDetails = (TextView)findViewById(R.id.tvDetails);
         etEmail = (EditText) findViewById(R.id.tbRegisterEmail);
         etPassword = (EditText) findViewById(R.id.tbRegisterPassword);
-        etUsername = (EditText) findViewById(R.id.tbUsername);
-
-//        Button btnRegister = (Button)findViewById(R.id.btnRegister);
-//        btnRegister.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                createAccount(etEmail.getText().toString(), etPassword.getText().toString());
-//            }
-//        });
     }
 
     @Override
@@ -80,21 +66,6 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-
-//    public void updateUI(FirebaseUser user){
-//        //hideProgressDialog();
-//        if(user!= null)
-//        {
-//            tvStatus.setText("user is good " + user.getEmail() + " " + user.isEmailVerified());
-//            tvDetails.setText("bueno " + user.getUid());
-//        }
-//        else
-//        {
-//            tvStatus.setText("usero logo outo");
-//            tvDetails.setText(null);
-//        }
-//    }
-
     private void createAccount(String email, String password)
     {
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -103,13 +74,6 @@ public class RegisterActivity extends AppCompatActivity {
                     Log.d("AccountCreation", "createUserWithEmail:onComplete " + task.isSuccessful());
                 if(task.isSuccessful())
                 {
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            usernameRef = RootRef.child("locations").child(auth.getCurrentUser().getUid()).child("username");
-                            usernameRef.setValue(etUsername.getText().toString());
-                        }
-                    }).start();
                     startMain();
                 }
                 else
@@ -122,14 +86,12 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void startMain() {
         Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("username", etUsername.getText().toString());
         startActivity(intent);
     }
 
     public void registerButtonClicked(View v) {
         String email = etEmail.getText().toString();
         String password = etPassword.getText().toString();
-        String username = etUsername.getText().toString();
 
         if (!email.contains("@")){
             tvStatus.setText("Email address not valid!");
@@ -139,9 +101,6 @@ public class RegisterActivity extends AppCompatActivity {
         }
         else if (TextUtils.isEmpty(email)) {
             tvStatus.setText("Email field cannot be empty!");
-        }
-        else if (TextUtils.isEmpty(username) || username.length() < 7) {
-            tvStatus.setText("Username must be at least 7 characters long!");
         }
         else {
             createAccount(email, password);
