@@ -94,6 +94,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     .addApi(LocationServices.API)
                     .build();
         }
+
+
     }
 
     @Override
@@ -118,10 +120,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             String userEmail;
 
                             for (DataSnapshot user : dataSnapshot.getChildren()) {
+                                Log.d("comparrison stuff ", "user key: " + user.getKey().toString());
+                                Log.d("comparrison stuff ", "currentUser key: " + currentUser.getUid().toString());
                                 if (user.getKey().toString().equals(currentUser.getUid().toString())) {
-                                    if (user.child("latitude").getValue(Double.class) == null) {
-                                        break;
-                                    }
 
                                     Marker ownPosition = map.addMarker(new MarkerOptions()
                                             .position(new LatLng(user.child("latitude").getValue(Double.class),
@@ -131,6 +132,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                     currentPosition = new LatLng(user.child("latitude").getValue(Double.class), user.child("longitude").getValue(Double.class));
                                 }
                                 else {
+                                    Log.d("stuff", user.child("latitude")
+                                            .getValue(Double.class).toString());
+                                    Log.d("stuff", user.child("longitude")
+                                            .getValue(Double.class).toString());
+
                                     map.addMarker(new MarkerOptions().position(new LatLng(user.child("latitude")
                                             .getValue(Double.class), user.child("longitude").getValue(Double.class))));
                                     allOtherLocations.add(new LatLng(user.child("latitude").getValue(Double.class), user.child("longitude").getValue(Double.class)));
@@ -138,21 +144,20 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                                 for (LatLng otherLocation : allOtherLocations)
                                 {
-
                                     if (user.child("latitude").getValue(Double.class) == null || currentPosition == null) {
                                         break;
                                     }
+
                                     userEmail = user.getKey();
                                     // Calculate distance and stuff
                                     double distance = getDistanceBetweenTwoPoints(currentPosition.latitude, currentPosition.longitude, otherLocation.latitude, otherLocation.longitude);
-                                    allOtherLocations.remove(otherLocation);
+
                                     System.out.println("Distance between " + currentUser.getEmail() + " and " + userEmail + " is " + distance);
                                     // If distance closer or something, do stuff, play sound, whatever.
                                     if (distance < 100){
                                         Toast.makeText(getApplicationContext(), userEmail + " is close", Toast.LENGTH_LONG).show();
                                         Vibrator vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
                                         vibe.vibrate(300);
-                                        
                                     }
                                 }
                             }
@@ -221,6 +226,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onLocationChanged(final Location location) {
+        Log.d("location" , " location changed");
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             new Thread(new Runnable() {
                 @Override
