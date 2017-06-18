@@ -1,8 +1,10 @@
 package com.teamawesome.android2application;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -13,6 +15,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -96,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     protected void onStart() {
         googleApiClient.connect();
-
+        System.out.println("entering onStart");
         locationsRef.addValueEventListener(new ValueEventListener() {
 
             @Override
@@ -132,8 +135,18 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 for (LatLng otherLocation : allOtherLocations)
                                 {
                                     // Calculate distance and stuff
+                                    double distance = getDistanceBetweenTwoPoints(currentPosition.latitude, currentPosition.longitude, otherLocation.latitude, otherLocation.longitude);
+                                    allOtherLocations.remove(otherLocation);
+                                    System.out.println("distance between" + currentUser.getUid() + " and something is " + distance);
 
                                     // If distance closer or something, do stuff, play sound, whatever.
+                                    if (distance < 100){
+                                        Toast.makeText(getApplicationContext(), "Username is close", Toast.LENGTH_LONG).show();
+                                        Vibrator vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                                        vibe.vibrate(100);
+                                        
+                                    }
+
                                 }
                             }
 
@@ -157,6 +170,22 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         googleApiClient.disconnect();
         super.onStop();
     }
+
+    public Double getDistanceBetweenTwoPoints(Double latitude1, Double longitude1, Double latitude2, Double longitude2){
+        final int RADIUS_EARTH = 6371;
+
+        double dLatitude = getRad(latitude2 - latitude1);
+        double dLongitude = getRad(longitude2 - longitude1);
+
+        double a = Math.sin(dLatitude / 2) * Math.sin(dLatitude / 2) + Math.cos(getRad(latitude1)) * Math.cos(getRad(latitude2)) * Math.sin(dLongitude / 2) * Math.sin(dLongitude / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return (RADIUS_EARTH * c) * 1000;
+    }
+
+    private Double getRad(double x) {
+        return x * Math.PI / 180;
+    }
+
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
