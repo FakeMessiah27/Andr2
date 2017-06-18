@@ -45,25 +45,15 @@ public class LogInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
         auth = FirebaseAuth.getInstance();
-        mGoogleBtn=(SignInButton) findViewById(R.id.googleBtn);
         authListener = new FirebaseAuth.AuthStateListener(){
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth){
-                if (firebaseAuth.getCurrentUser() !=null){
+                if (firebaseAuth.getCurrentUser() != null){
                     startActivity(new Intent(LogInActivity.this, MainActivity.class));
                 }
             }
         };
-        authListener = new FirebaseAuth.AuthStateListener(){
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth){
-//                if(currentUser!=null){
-//
-//                } else {
-//
-//                }
-            }
-        };
+        mGoogleBtn=(SignInButton) findViewById(R.id.googleBtn);
         etEmail = (EditText) findViewById(R.id.etLoginEmail);
         etPassword = (EditText) findViewById(R.id.etLoginPassword);
         tvStatus = (TextView) findViewById(R.id.tvStatus);
@@ -91,6 +81,9 @@ public class LogInActivity extends AppCompatActivity {
 
             }
         });
+
+
+
     }
     private void signIn() {
         Intent signInIntent;
@@ -117,7 +110,7 @@ public class LogInActivity extends AppCompatActivity {
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
-        Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
+
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
         auth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -144,7 +137,6 @@ public class LogInActivity extends AppCompatActivity {
     @Override
     public void onStart(){
         super.onStart();
-        FirebaseUser currentUser= auth.getCurrentUser();
         auth.addAuthStateListener(authListener);
     }
 
