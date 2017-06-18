@@ -17,11 +17,15 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class RegisterActivity extends AppCompatActivity {
 
     private FirebaseAuth auth;
     private FirebaseAuth.AuthStateListener authListener;
+    DatabaseReference RootRef;
+    DatabaseReference usernameRef;
 
     TextView tvStatus;
     TextView tvDetails;
@@ -44,6 +48,8 @@ public class RegisterActivity extends AppCompatActivity {
 //              }
           }
         };
+
+        RootRef = FirebaseDatabase.getInstance().getReference();
 
         tvStatus = (TextView)findViewById(R.id.tvStatus);
         tvDetails = (TextView)findViewById(R.id.tvDetails);
@@ -91,13 +97,19 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void createAccount(String email, String password)
     {
-        Log.d("AccountCreation", "MethodFired");
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                     Log.d("AccountCreation", "createUserWithEmail:onComplete " + task.isSuccessful());
                 if(task.isSuccessful())
                 {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            usernameRef = RootRef.child("locations").child(auth.getCurrentUser().getUid()).child("username");
+                            usernameRef.setValue(etUsername.getText().toString());
+                        }
+                    }).start();
                     startMain();
                 }
                 else
@@ -108,8 +120,9 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    private void startMain(){
+    private void startMain() {
         Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("username", etUsername.getText().toString());
         startActivity(intent);
     }
 
@@ -121,14 +134,14 @@ public class RegisterActivity extends AppCompatActivity {
         if (!email.contains("@")){
             tvStatus.setText("Email address not valid!");
         }
-        else if (TextUtils.isEmpty(password)) {
-            tvStatus.setText("Password field cannot be empty!");
+        else if (TextUtils.isEmpty(password) || password.length() < 7) {
+            tvStatus.setText("Password must be at least 7 characters long!");
         }
         else if (TextUtils.isEmpty(email)) {
             tvStatus.setText("Email field cannot be empty!");
         }
-        else if (TextUtils.isEmpty(username)) {
-            tvStatus.setText("Email field cannot be empty!");
+        else if (TextUtils.isEmpty(username) || username.length() < 7) {
+            tvStatus.setText("Username must be at least 7 characters long!");
         }
         else {
             createAccount(email, password);

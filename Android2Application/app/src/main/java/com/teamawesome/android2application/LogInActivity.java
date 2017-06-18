@@ -64,6 +64,7 @@ public class LogInActivity extends AppCompatActivity {
 //
 //            }
 //        };
+
         mGoogleBtn=(SignInButton) findViewById(R.id.googleBtn);
         etEmail = (EditText) findViewById(R.id.etLoginEmail);
         etPassword = (EditText) findViewById(R.id.etLoginPassword);
@@ -96,6 +97,7 @@ public class LogInActivity extends AppCompatActivity {
 
 
     }
+
     private void signIn() {
         Intent signInIntent;
         signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
@@ -109,6 +111,7 @@ public class LogInActivity extends AppCompatActivity {
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            Log.d("resultGoogle ", String.valueOf(result.isSuccess()));
             if (result.isSuccess()) {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = result.getSignInAccount();

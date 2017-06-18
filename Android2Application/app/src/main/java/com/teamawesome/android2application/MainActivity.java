@@ -118,6 +118,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                             for (DataSnapshot user : dataSnapshot.getChildren()) {
                                 if (user.getKey().toString().equals(currentUser.getUid().toString())) {
+                                    if (user.child("latitude").getValue(Double.class) == null) {
+                                        break;
+                                    }
+
                                     Marker ownPosition = map.addMarker(new MarkerOptions()
                                             .position(new LatLng(user.child("latitude").getValue(Double.class),
                                                     user.child("longitude").getValue(Double.class))).title("Your location"));
@@ -134,6 +138,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                                 for (LatLng otherLocation : allOtherLocations)
                                 {
+                                    if (user.child("latitude").getValue(Double.class) == null || currentPosition == null) {
+                                        break;
+                                    }
+
                                     // Calculate distance and stuff
                                     double distance = getDistanceBetweenTwoPoints(currentPosition.latitude, currentPosition.longitude, otherLocation.latitude, otherLocation.longitude);
                                     allOtherLocations.remove(otherLocation);
@@ -146,7 +154,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                         vibe.vibrate(100);
                                         
                                     }
-
                                 }
                             }
 
