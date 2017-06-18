@@ -7,23 +7,23 @@
 android:background="@mipmap/bg_log_in"
     tools:context="com.teamawesome.android2application.LogInActivity">
 
+    <com.google.android.gms.common.SignInButton
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/googleBtn" />
     <Button
         android:id="@+id/button"
         android:layout_width="91dp"
-        android:layout_height="48dp"
+        android:layout_height="41dp"
         android:onClick="logIn"
         android:text="Log In"
         android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@+id/etLoginPassword"
-        android:layout_marginRight="8dp"
+        android:layout_marginRight="91dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="8dp"
-        app:layout_constraintVertical_bias="0.0"
-        android:layout_marginEnd="91dp"
-        android:layout_marginLeft="8dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintHorizontal_bias="1.0" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <EditText
         android:id="@+id/etLoginEmail"
@@ -35,15 +35,14 @@ android:background="@mipmap/bg_log_in"
         android:shadowColor="@color/colorAccent"
         android:textColorHint="@color/colorAccent"
         android:ems="10"
+        android:text="ctest@gmail.com"
         android:hint="Name@domain.com"
         android:inputType="textEmailAddress"
         android:textSize="20dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="105dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp" />
+        android:layout_marginTop="105dp" />
 
     <EditText
         android:id="@+id/etLoginPassword"
@@ -56,21 +55,19 @@ android:background="@mipmap/bg_log_in"
         android:shadowColor="@color/colorAccent"
         android:textColorHint="@color/colorAccent"
         android:ems="10"
-        android:hint="Password"
+       android:text = "testtest"
         android:inputType="textPassword"
         android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/etLoginEmail"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp" />
+        app:layout_constraintTop_toBottomOf="@+id/etLoginEmail" />
 
     <Button
         android:id="@+id/btnRegister"
         android:layout_width="94dp"
-        android:layout_height="48dp"
+        android:layout_height="41dp"
         android:onClick="register"
         android:text="Register"
         android:layout_marginTop="8dp"
@@ -80,11 +77,9 @@ android:background="@mipmap/bg_log_in"
         android:layout_marginBottom="8dp"
         app:layout_constraintVertical_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/button"
         android:layout_marginRight="8dp"
-        app:layout_constraintHorizontal_bias="0.233"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintHorizontal_bias="0.946" />
 
     <TextView
         android:id="@+id/tvStatus"
@@ -100,22 +95,6 @@ android:background="@mipmap/bg_log_in"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp" />
-
-    <com.google.android.gms.common.SignInButton
-        android:id="@+id/googleBtn"
-        android:layout_width="232dp"
-        android:layout_height="41dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="18dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnRegister"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="1.0" />
 
 </android.support.constraint.ConstraintLayout>
