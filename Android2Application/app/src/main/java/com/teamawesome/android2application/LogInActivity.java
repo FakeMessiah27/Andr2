@@ -48,11 +48,22 @@ public class LogInActivity extends AppCompatActivity {
         authListener = new FirebaseAuth.AuthStateListener(){
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth){
-                if (firebaseAuth.getCurrentUser() != null){
-                    startActivity(new Intent(LogInActivity.this, MainActivity.class));
-                }
+//                if(currentUser!=null){
+//
+//                } else {
+//
+//                }
             }
         };
+//        authListener = new FirebaseAuth.AuthStateListener(){
+//            @Override
+//            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth){
+//                if (firebaseAuth.getCurrentUser() != null){
+//                    startActivity(new Intent(LogInActivity.this, MainActivity.class));
+//                }
+//
+//            }
+//        };
         mGoogleBtn=(SignInButton) findViewById(R.id.googleBtn);
         etEmail = (EditText) findViewById(R.id.etLoginEmail);
         etPassword = (EditText) findViewById(R.id.etLoginPassword);
@@ -120,6 +131,7 @@ public class LogInActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = auth.getCurrentUser();
+                            startActivity(new Intent(LogInActivity.this, MainActivity.class));
 
                         } else {
                             // If sign in fails, display a message to the user.
